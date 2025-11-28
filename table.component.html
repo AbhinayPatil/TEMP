@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="table-container">
+        <div class="tb-title">
+            <p>{{title}}</p>
+            <i class="fa fa-file"></i>
+        </div>
+        <table>
+            <thead>
+                <tr class="main-row">
+                    <th *ngFor="let header of headers; let i= index"
+                        [ngStyle]="{ width: columnWidths[i],position:'sticky',top:'0',zIndex:'1'}">{{header}}</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="table-body">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <ng-container *ngFor="let row of paginatedData; let index=index" >
+                        <tr class="main-row">
+                            <td *ngFor="let header of headers; let i = index" [ngStyle]="{ width: columnWidths[i] }">
+                               <div *ngIf="header!='Action'">
+                                <p>{{row[header]}}</p>
+                               </div>
+                               <div  *ngIf="header=='Action'">
+                                <i *ngIf="actionIncluded('view')" class="fa fa-eye me-1" (click)="onEyeClicked(row,index)"></i>
+                                <i *ngIf="actionIncluded('edit')" class="fa fa-pencil me-1" (click)="onEditClicked(row,index)"></i>
+                                <i *ngIf="actionIncluded('delete')" class="fa fa-trash" (click)="onDeleteClicked(index)"></i>
+                               </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="paginatedData.length==0">
+                        <tr class="main-row empty">
+                            <td [attr.colspan]="headers.length">
+                                <p>No Data Available</p>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagination-container mt-2">
+        <div>
+            <p>showing {{start}}-{{end}} of {{total}}</p>
+        </div>
+        <div class="pagination">
+            <button (click)="startPage()" [class.disabled]="currentPage === 1"
+                class="btn pagination-btn pagination-start"><i class="fa-solid fa-angles-left icon-2"></i></button>
+            <button (click)="prevPage()" [class.disabled]="currentPage === 1"
+                class="btn pagination-btn pagination-next"><i class="fa-solid fa-angle-left icon-2"></i></button>
+            <button (click)="nextPage()" [class.disabled]="currentPage * pageSize >= rows.length"
+                class="btn pagination-btn pagination-prev"><i class="fa-solid fa-angle-right icon-2"></i></button>
+            <button (click)="endPage()" [class.disabled]="currentPage * pageSize >= rows.length"
+                class="btn pagination-btn pagination-end"><i class="fa-solid fa-angles-right icon-2"></i></button>
+        </div>
+    </div>
+</div>
+    <!-- <div class="horizontal-divider"></div> -->
